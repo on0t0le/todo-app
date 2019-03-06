@@ -1,3 +1,6 @@
-<p>
-  main-content works!
-</p>
+<div class="inputField">
+  <mat-form-field>
+    <input matInput placeholder="Input task" [formControl]="task">
+  </mat-form-field>
+  <button mat-raised-button color="accent" (click)="addItem()">Add</button>
+</div>

@@ -1,0 +1,10 @@
+.inputField{
+    width: 50%;
+    margin: 10px auto;
+    /*
+    outline-style: solid;
+    outline-color: red;
+    */
+    display: flex;
+    flex-direction: column;    
+}

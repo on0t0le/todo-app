@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-main-content',
   templateUrl: './main-content.component.html',
   styleUrls: ['./main-content.component.css']
 })
-export class MainContentComponent implements OnInit {
+export class MainContentComponent {
 
+  task = new FormControl('');
   constructor() { }
 
-  ngOnInit() {
+  addItem(){
+    console.log(this.task.value);
   }
-
 }
