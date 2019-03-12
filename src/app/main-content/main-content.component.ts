@@ -9,9 +9,15 @@ import { FormControl } from '@angular/forms';
 export class MainContentComponent {
 
   task = new FormControl('');
+  tasks: string [] = [];
+
   constructor() { }
 
   addItem(){
+    if(!this.task.value){
+      return;
+    }
     console.log(this.task.value);
+    this.tasks.push(this.task.value);
   }
 }

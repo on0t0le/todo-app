@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 //Material components
-import { MatButtonModule, MatInputModule, MatFormFieldModule } from '@angular/material'
+import { MatButtonModule, MatInputModule, MatFormFieldModule, MatListModule } from '@angular/material'
 
 import { AppComponent } from './app.component';
 import { MainContentComponent } from './main-content/main-content.component';
@@ -20,7 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     MatButtonModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

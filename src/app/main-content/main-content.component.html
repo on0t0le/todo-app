@@ -1,6 +1,14 @@
-<div class="inputField">
+<div class="main-input">
   <mat-form-field>
     <input matInput placeholder="Input task" [formControl]="task">
   </mat-form-field>
   <button mat-raised-button color="accent" (click)="addItem()">Add</button>
+</div>
+<div class="main-list">
+  Here is what you should do:
+  <mat-selection-list class="main-list__items">
+    <mat-list-option *ngFor="let todo of tasks">
+      {{todo}}
+    </mat-list-option>
+  </mat-selection-list>
 </div>
