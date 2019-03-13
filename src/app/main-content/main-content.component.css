@@ -18,3 +18,12 @@
 .main-list .main-list__items {
     text-align: left;
 }
+
+.deleteBtn {
+    margin: 0 10px;    
+}
+
+.deleteBtn:hover,
+.deleteBtn:active {
+    background: #f44336;
+}
