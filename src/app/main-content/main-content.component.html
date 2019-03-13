@@ -9,7 +9,7 @@
   <mat-nav-list>
     <mat-list-item *ngFor="let todo of tasks">
       <a matLine href="#">{{ todo.task }}</a>
-      <button mat-icon-button (click)="editTask(todo.id)">
+      <button mat-icon-button (click)="editTask(todo)">
         <mat-icon>edit</mat-icon>
       </button>
       <a mat-icon-button (click)="deleteTask(todo.id)" class="deleteBtn">
