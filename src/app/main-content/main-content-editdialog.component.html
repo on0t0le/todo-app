@@ -3,10 +3,10 @@
   <p>Change task?</p>
   <p>{{data.task}}</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.task">
+    <input matInput placeholder="Change this task to" [(ngModel)]="newref.task">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data.task" cdkFocusInitial>Ok</button>
+  <button mat-button [mat-dialog-close]="onOkClick()" cdkFocusInitial>Ok</button>
 </div>

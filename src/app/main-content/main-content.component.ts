@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { MainContentEditdialogComponent } from './main-content-editdialog.component';
 import { Task } from '../task';
 import { TasksService } from '../tasks.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-main-content',
@@ -16,32 +17,34 @@ export class MainContentComponent implements OnInit {
   task = new FormControl('');
   tasks: Task[] = [];
 
-  // lastId: number = this.idInit();
-
-  constructor(public dialog: MatDialog, private tasksService: TasksService) { }
+  constructor(public dialog: MatDialog, private tasksService: TasksService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    //Load all tasks
+    this.getTasks();
+  }
+
+  getTasks() {
     this.tasksService.getAllTasks().subscribe(
       data => {
-        this.tasks = data as Task[];
+        this.tasks = data;
+        //NOT WORKING YET!!!! Need FIX!!!
+        this.cd.markForCheck();
       },
       err => {
+        //Something went wrong
         console.error(err);
       }
     );
+
   }
 
   addItem() {
+    //If nothing was inputed do nothing too
     if (!this.task.value) {
       return;
     }
-    // console.log(this.task.value);
-    // let newTask: Task = {
-    //   id: this.idGenerator(),
-    //   task: this.task.value,
-    //   isDone: false
-    // };
-    // this.tasks.push(newTask);
+    //Instanciate new task
     let newTask: Task = {
       task: this.task.value,
       isDone: false
@@ -49,42 +52,22 @@ export class MainContentComponent implements OnInit {
     this.tasksService.addTask(newTask).subscribe(
       (data: Task) => {
         console.log('Posted', data);
+        //Reload list of tasks
+        this.getTasks();
       },
       err => {
         console.error(err);
       }
     );
 
-  }
-
-  editTask(task) {
-    // console.log(task);
-
-    // const dialogRef = this.dialog.open(MainContentEditdialogComponent, {
-    //   height: '400px',
-    //   width: '600px',
-    //   restoreFocus: false,
-    //   data: { id: task.id, task: task.task }
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   // console.log(result);
-    //   if (!result) {
-    //     return;
-    //   }
-    //   task.task = result;
-    // });
   }
 
   deleteTask(task) {
-    // console.log(task);
-    // const index: number = this.tasks.indexOf(task);
-    // if (index !== -1) {
-    //   this.tasks.splice(index, 1);
-    // }
-    this.tasksService.deleteTask(task).subscribe(
-      (ok) => {
-        console.log(ok)
+    this.tasksService.deleteTask(task).subscribe(       
+      () => {
+        //console.log(ok);
+        //Reload list of tasks
+        this.getTasks();
       },
       err => {
         console.error(err);
@@ -92,21 +75,33 @@ export class MainContentComponent implements OnInit {
     );
   }
 
-  // idGenerator(): number {
-  //   this.lastId = this.lastId + 1;
-  //   return this.lastId;
-  // }
+  editTask(task: Task) {
+    //Create dialog-box and transfer task as data in it
+    const dialogRef = this.dialog.open(MainContentEditdialogComponent, {
+      height: '400px',
+      width: '600px',
+      restoreFocus: false,
+      data: task
+    });
+    //What to do after dialog-box closes
+    dialogRef.afterClosed().subscribe(result => {
+      //If result is null, then do nothing(good boy, just test windows opening)
+      if (!result) {
+        return;
+      };
+      //If receive data - go PATCH it!
+      this.tasksService.editPathcTask(task.id, result).subscribe(
+        responce =>{
+          //console.log(responce);
+          //Reload list of tasks
+          this.getTasks();
+        },
+        err =>{          
+          console.error(err);
+        }
+      );      
+    });
 
-  // idInit(): number {
-  //   if (this.tasks.length != 0) {
-  //     return this.tasks[(this.tasks.length - 1)].id;
-  //   }
-  //   return 0;
-  // }
-
+    
+  }
 }
-
-// const tasksList: Task[] = [
-//   { id: 1, task: 'Make todo-app', isDone: false },
-//   { id: 2, task: 'Create API for todo-app', isDone: true }
-// ]

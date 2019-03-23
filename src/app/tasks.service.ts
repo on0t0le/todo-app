@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Task } from './task';
 import { Observable } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class TasksService {
 
   constructor(private http: HttpClient) { }
 
-  getAllTasks():Observable<Task[]> {
+  getAllTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(this.baseUrl+'/tasks');
   }
 
@@ -26,6 +26,17 @@ export class TasksService {
 
   deleteTask(task: Task){
     return this.http.delete(this.baseUrl+`/tasks/${task.id}`, httpOptions);
+  }
+
+  editPathcTask(id: number, body: any) {
+    // let body = {
+    //   "isDone": true
+    // }
+    // const body = new HttpParams()
+    // .set('isDone','true');
+    console.warn('This is received in body: ', body);
+    
+    return this.http.patch(this.baseUrl+`/tasks/${id}`,body);
   }
 }
 
