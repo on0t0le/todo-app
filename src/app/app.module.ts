@@ -2,9 +2,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 //Material components
-import { MatButtonModule, MatInputModule, MatFormFieldModule, MatListModule, MatIconModule, MatDialogModule } from '@angular/material'
+import {
+  MatButtonModule,
+  MatInputModule,
+  MatFormFieldModule,
+  MatListModule,
+  MatIconModule,
+  MatDialogModule,
+  MatCheckboxModule
+} from '@angular/material'
 
 import { AppComponent } from './app.component';
 import { MainContentComponent } from './main-content/main-content.component';
@@ -27,7 +36,9 @@ import { MainContentEditdialogComponent } from './main-content/main-content-edit
     MatListModule,
     MatIconModule,
     MatDialogModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+    MatCheckboxModule
   ],
 
   entryComponents: [

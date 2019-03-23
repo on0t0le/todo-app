@@ -9,6 +9,7 @@
   <mat-nav-list>
     <mat-list-item *ngFor="let todo of tasks">
       <a matLine href="#">{{ todo.task }}</a>
+      <mat-checkbox [(ngModel)]="todo.isDone">Done</mat-checkbox>
       <button mat-icon-button (click)="editTask(todo)">
         <mat-icon>edit</mat-icon>
       </button>
