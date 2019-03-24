@@ -1,10 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { MainContentEditdialogComponent } from './main-content-editdialog.component';
 import { Task } from '../task';
 import { TasksService } from '../tasks.service';
-import { Observable } from 'rxjs';
+import { compare } from 'fast-json-patch'
 
 @Component({
   selector: 'app-main-content',
@@ -17,7 +17,7 @@ export class MainContentComponent implements OnInit {
   task = new FormControl('');
   tasks: Task[] = [];
 
-  constructor(public dialog: MatDialog, private tasksService: TasksService, private cd: ChangeDetectorRef) { }
+  constructor(public dialog: MatDialog, private tasksService: TasksService) { }
 
   ngOnInit() {
     //Load all tasks
@@ -26,10 +26,9 @@ export class MainContentComponent implements OnInit {
 
   getTasks() {
     this.tasksService.getAllTasks().subscribe(
-      data => {
+      data => {        
         this.tasks = data;
-        //NOT WORKING YET!!!! Need FIX!!!
-        this.cd.markForCheck();
+        console.warn('Data was fetched');        
       },
       err => {
         //Something went wrong
@@ -51,7 +50,7 @@ export class MainContentComponent implements OnInit {
     }
     this.tasksService.addTask(newTask).subscribe(
       (data: Task) => {
-        console.log('Posted', data);
+        console.warn('New rask posted: ', data);
         //Reload list of tasks
         this.getTasks();
       },
@@ -65,7 +64,7 @@ export class MainContentComponent implements OnInit {
   deleteTask(task) {
     this.tasksService.deleteTask(task).subscribe(       
       () => {
-        //console.log(ok);
+        console.warn('Task was deleted!');
         //Reload list of tasks
         this.getTasks();
       },
@@ -81,7 +80,7 @@ export class MainContentComponent implements OnInit {
       height: '400px',
       width: '600px',
       restoreFocus: false,
-      data: task
+      data: {id:task.id ,task: task.task, isDone: task.isDone}
     });
     //What to do after dialog-box closes
     dialogRef.afterClosed().subscribe(result => {
@@ -89,10 +88,17 @@ export class MainContentComponent implements OnInit {
       if (!result) {
         return;
       };
+      //console.warn('Dialog-box result: ',result);
+      //Compare tasks befor and after edit
+      let body = compare(task,result);
+      console.log('This is what go to body: ', body);
+      if (!body.length){
+        return;
+      }
       //If receive data - go PATCH it!
-      this.tasksService.editPathcTask(task.id, result).subscribe(
-        responce =>{
-          //console.log(responce);
+      this.tasksService.editPathcTask(task.id, body).subscribe(
+        () =>{
+          console.warn('Patching succesfull!')          
           //Reload list of tasks
           this.getTasks();
         },
